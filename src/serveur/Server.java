@@ -20,11 +20,13 @@ public class Server {
 
 	static int DEFAULT_SERVER_PORT = 2222;
 		
+	
 	public static void main(String[] args){
 		
 		int serveurPort;
 		ServerSocket socket;
 
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		
 		System.out.println("Serveur Port ?: " + DEFAULT_SERVER_PORT);
@@ -56,9 +58,10 @@ class Accepter_clients implements Runnable {
 	private int MAX = 256;
 	private ServerSocket socketserver;
 	private Socket socket;
-	//private int nbrclient = 1;
+	@SuppressWarnings("unused")
 	private byte[] buff = new byte[MAX];
 	
+	@SuppressWarnings("unused")
 	private String message;
 	 
 	public Accepter_clients(ServerSocket s){
@@ -71,26 +74,26 @@ class Accepter_clients implements Runnable {
 	        	while(true){
 	        		//accepter la demande de connexion du client 
 	        		socket = socketserver.accept(); // Un client se connecte on l'accepte
-	                
-	        		//System.out.println("Le client numéro "+nbrclient+ " est connecté !");
-	                //nbrclient++;
-	                
+	                                
 	                //recevoir le message du client
 	                InputStream is = socket.getInputStream();
 	                InputStreamReader isr = new InputStreamReader(is);
 	                BufferedReader br = new BufferedReader(isr);
 	                String message = br.readLine();
-	                System.out.println("Message reçu du client: "+message);
+	                
+	                String destinataire = socket.getRemoteSocketAddress().toString();
+	                System.out.println("Message reçu du client: "+message+ " " + destinataire);
 	        		
 	           
 	                message = message.toUpperCase();
+	                
 	                
 	                //envoyer le message de retour au client.
 	                OutputStream os = socket.getOutputStream();
 	                OutputStreamWriter osw = new OutputStreamWriter(os);
 	                BufferedWriter bw = new BufferedWriter(osw);
 	                bw.write(message);
-	                System.out.println("Message retourner au client: " + message);
+	                System.out.println("Message retourne au client: " + message);
 	                bw.flush();
 	                
 	                socket.close();

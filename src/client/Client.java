@@ -30,9 +30,12 @@ public class Client {
 		String message;
 
 		
+		@SuppressWarnings("unused")
 		InetAddress adresseIP;
+		@SuppressWarnings("unused")
 		int port;
 	
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		
 		System.out.println("Vers adresse IP : localhost");
@@ -68,8 +71,7 @@ public class Client {
 							
 		message = scannMessage;
 				
-		
-		
+			
 		try {
 		
 			//Connecter au serveur
