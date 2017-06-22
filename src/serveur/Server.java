@@ -1,3 +1,9 @@
+/*
+ * Code source inspire de :
+ * http://www.careerbless.com/samplecodes/java/beginners/socket/SocketBasic1.php
+ * https://openclassrooms.com/courses/introduction-aux-sockets-1
+ * 
+ */
 package serveur;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,19 +13,37 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Scanner;
 import java.net.ServerSocket;
 
 public class Server {
 
-	public static void main(String[] zero){
-
+	static int DEFAULT_SERVER_PORT = 2222;
+		
+	public static void main(String[] args){
+		
+		int serveurPort;
 		ServerSocket socket;
+
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Serveur Port ?: " + DEFAULT_SERVER_PORT);
+		
+		String scannPort = scanner.nextLine();
+		
+		try{
+			
+			serveurPort = Integer.parseInt(scannPort);
+	    }catch(NumberFormatException e){
+	    	serveurPort=DEFAULT_SERVER_PORT;
+	    }		
+		
 		
 		try {
-		socket = new ServerSocket(2222);
+		socket = new ServerSocket(serveurPort);
 		Thread t = new Thread(new Accepter_clients(socket));
 		t.start();
-		System.out.println("Bring it on 2222!");
+		System.out.println("Merci. Le serveur est pret.");
 		
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -32,10 +56,10 @@ class Accepter_clients implements Runnable {
 	private int MAX = 256;
 	private ServerSocket socketserver;
 	private Socket socket;
-	private int nbrclient = 1;
+	//private int nbrclient = 1;
 	private byte[] buff = new byte[MAX];
 	
-	private String messageRetour = "There will be no peace" + "\n";
+	private String message;
 	 
 	public Accepter_clients(ServerSocket s){
 		socketserver = s;
@@ -47,8 +71,9 @@ class Accepter_clients implements Runnable {
 	        	while(true){
 	        		//accepter la demande de connexion du client 
 	        		socket = socketserver.accept(); // Un client se connecte on l'accepte
-	                System.out.println("Le client numéro "+nbrclient+ " est connecté !");
-	                nbrclient++;
+	                
+	        		//System.out.println("Le client numéro "+nbrclient+ " est connecté !");
+	                //nbrclient++;
 	                
 	                //recevoir le message du client
 	                InputStream is = socket.getInputStream();
@@ -58,12 +83,14 @@ class Accepter_clients implements Runnable {
 	                System.out.println("Message reçu du client: "+message);
 	        		
 	           
+	                message = message.toUpperCase();
+	                
 	                //envoyer le message de retour au client.
 	                OutputStream os = socket.getOutputStream();
 	                OutputStreamWriter osw = new OutputStreamWriter(os);
 	                BufferedWriter bw = new BufferedWriter(osw);
-	                bw.write(messageRetour);
-	                System.out.println("Message retourner au client: "+messageRetour);
+	                bw.write(message);
+	                System.out.println("Message retourner au client: " + message);
 	                bw.flush();
 	                
 	                socket.close();

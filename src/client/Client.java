@@ -1,3 +1,9 @@
+/*
+ * Code source inspire de :
+ * http://www.careerbless.com/samplecodes/java/beginners/socket/SocketBasic1.php
+ * https://openclassrooms.com/courses/introduction-aux-sockets-1
+ * 
+ */
 package client;
 
 import java.io.BufferedReader;
@@ -10,16 +16,60 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
-//http://www.careerbless.com/samplecodes/java/beginners/socket/SocketBasic1.php
+
 
 public class Client {
 	
-	public static void main(String[] zero) {
+	static int DEFAULT_SERVER_PORT = 2222;
+	
+	public static void main(String[] args) {
 		
 		Socket socket;
-		String message = "We come in piece.";
+		String message;
 
+		
+		InetAddress adresseIP;
+		int port;
+	
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Vers adresse IP : localhost");
+		
+		String scannIpAddress = scanner.nextLine();
+		
+		try {
+			adresseIP = InetAddress.getByName(scannIpAddress);
+		} catch (UnknownHostException e) {
+			try {
+				adresseIP = InetAddress.getLocalHost();
+			} catch (UnknownHostException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+	
+		System.out.println("Vers Port : "+ DEFAULT_SERVER_PORT);
+		
+		String scannPort = scanner.nextLine();
+							
+		try{
+			
+			port = Integer.parseInt(scannPort);
+	    }catch(NumberFormatException e){
+	    	port = DEFAULT_SERVER_PORT;
+	    }
+		
+		
+		System.out.println("Veuillez saisir un message : ");
+		
+		String scannMessage = scanner.nextLine();
+							
+		message = scannMessage;
+				
+		
+		
 		try {
 		
 			//Connecter au serveur
@@ -34,12 +84,12 @@ public class Client {
             bw.write(envoieMessage);
             bw.flush();
             
-            //recevoir le message retourner du serveur
+            //recevoir le message retourne du serveur
             InputStream is = socket.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             String messageRecu = br.readLine();
-            System.out.println("Message retourner par le serveur : " +messageRecu);
+            System.out.println("\nMessage retourner par le serveur : " +messageRecu);
             
 			socket.close();
 			
