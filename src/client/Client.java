@@ -25,14 +25,14 @@ public class Client {
 	static int DEFAULT_SERVER_PORT = 2222;
 	
 	public static void main(String[] args) {
-		
+			
 		Socket socket;
 		String message;
 
 		
 		@SuppressWarnings("unused")
 		InetAddress adresseIP;
-		@SuppressWarnings("unused")
+
 		int port;
 	
 		@SuppressWarnings("resource")
@@ -75,7 +75,7 @@ public class Client {
 		try {
 		
 			//Connecter au serveur
-		    socket = new Socket(InetAddress.getLocalHost(),2222);	
+		    socket = new Socket(InetAddress.getLocalHost(),port);	
 		    
 		    //envoyer un message au serveur
 		    OutputStream os = socket.getOutputStream();
@@ -101,6 +101,7 @@ public class Client {
 		}catch (IOException e) {
 			
 			e.printStackTrace();
-		}	
+		}
+		
 	}
 }
